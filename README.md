@@ -12,7 +12,6 @@ A role-based project and task management app built with **React**, **Firebase Au
 - [How Firebase Auth Works in This Project](#how-firebase-auth-works-in-this-project)
 - [How Firebase RTDB Works in This Project](#how-firebase-rtdb-works-in-this-project)
 - [Role & Permission System](#role--permission-system)
-- [Database Rules Explained](#database-rules-explained)
 - [Setup Guide for New Users](#setup-guide-for-new-users)
 - [Environment Variables](#environment-variables)
 - [Common Issues & Fixes](#common-issues--fixes)
@@ -207,46 +206,6 @@ All permission logic lives in `src/utils/permissions.js`. Components import thes
 | Update status on **own** task | ✅ | ✅ |
 | Update status on **others'** tasks | ✅ | ❌ |
 | View all tasks | ✅ | ❌ (own only) |
-
----
-
-## Database Rules Explained
-
-```json
-"users": {
-  ".read": "auth != null"
-}
-```
-Any logged-in user can read the full users list. This is needed to resolve names in the dashboard (e.g. "Assigned to Alice").
-
-```json
-"users/$uid": {
-  ".write": "auth != null && auth.uid === $uid"
-}
-```
-A user can only write to their **own** user record. They cannot change someone else's role.
-
-```json
-"projects/$projectId": {
-  ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'ADMIN'"
-}
-```
-Only users whose `role` in RTDB is `ADMIN` can create or delete projects.
-
-```json
-"tasks/$taskId": {
-  ".write": "auth != null && (
-    role === 'ADMIN'
-    ||
-    (
-      data.child('assigneeId').val() === auth.uid &&   // task already assigned to this user
-      newData.child('assigneeId').val() === auth.uid && // they can't re-assign to someone else
-      newData.child('status').val() === 'TODO' | 'IN_PROGRESS' | 'DONE'
-    )
-  )"
-}
-```
-ADMINs can do anything. MEMBERs can only update tasks **assigned to them**, and cannot change the `assigneeId` — just the `status`.
 
 ---
 
