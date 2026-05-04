@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
-import { auth, db } from "../firebase";
+import { auth, db } from "../firebase"; 
 import { signOut } from "firebase/auth";
 import { ref, onValue, push, set, remove, update } from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ import {
   isAdmin,
 } from "../utils/permissions";
 
-// ─── Status helpers ─
+// Status helpers
 
 const STATUS_META = {
   TODO: {
@@ -80,7 +80,7 @@ function InlineStatusSelect({ task, onUpdate, user }) {
   );
 }
 
-// ─── Main component ──
+// Main component
 
 export default function Dashboard() {
   const { dbUser } = useAuth();
@@ -100,7 +100,7 @@ export default function Dashboard() {
   const projectsRef = useRef({});
   const tasksRef = useRef({});
 
-  // ── Derive display state from raw maps ───────────────────────────────────
+  // Derive display state from raw maps 
   const sync = (user) => {
     const usersData = usersRef.current;
     const projectsData = projectsRef.current;
@@ -132,7 +132,7 @@ export default function Dashboard() {
     setTasks(parsedTasks);
   };
 
-  // ── Real-time Firebase listeners ──────────────────────────────────────────
+  // Real-time Firebase listeners
   useEffect(() => {
     if (!dbUser) return;
 
@@ -415,7 +415,7 @@ export default function Dashboard() {
                     {canDeleteProject(dbUser) && (
                       <button
                         className="btn btn-sm btn-outline-danger border-0 position-absolute"
-                        style={{ top: 8, right: 8, zIndex: 3 }}
+                        style={{ top: 46, right: 12, zIndex: 3 }}
                         onClick={(e) => removeProject(e, project.id)}
                         title="Delete Project"
                       >

@@ -38,22 +38,38 @@ export default function Signup() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
+    <div className="auth-container">
+      <div className="auth-wrapper">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="auth-form-card"
+        >
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            className="auth-svg-container"
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="card shadow-sm border-0"
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="auth-svg">
+              <circle cx="100" cy="70" r="30" fill="none" stroke="var(--accent-color)" strokeWidth="2" />
+              <path d="M 60 130 Q 60 115 100 115 Q 140 115 140 130 L 140 155 Q 140 160 135 160 L 65 160 Q 60 160 60 155 Z" 
+                fill="none" stroke="var(--accent-color)" strokeWidth="2" />
+              <circle cx="140" cy="50" r="18" fill="none" stroke="var(--accent-color)" strokeWidth="2" opacity="0.7" />
+              <path d="M 140 42 L 140 58 M 132 50 L 148 50" stroke="var(--accent-color)" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+            </svg>
+          </motion.div>
+
+          <div className="card shadow-sm border-0 auth-card"
             style={{ background: 'var(--bg-color-secondary)' }}
           >
-            <div className="card-body p-5">
-              <h2 className="text-center mb-4" style={{ color: 'var(--text-primary)' }}>Create an Account</h2>
-              <p className="text-center text-muted mb-4">Join your team and start managing tasks.</p>
+            <div className="card-body auth-card-body">
+              <h2 className="text-center mb-2" style={{ color: 'var(--text-primary)' }}>Create an Account</h2>
+              <p className="text-center text-muted mb-5">Join your team and start managing tasks.</p>
               
               {error && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="alert alert-danger border-0 bg-danger text-white bg-opacity-25">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="alert alert-danger border-0 bg-danger text-white bg-opacity-25 mb-4">
                   {error}
                 </motion.div>
               )}
@@ -96,8 +112,8 @@ export default function Signup() {
                 <Link to="/login" className="text-decoration-none fw-bold">Log In</Link>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
