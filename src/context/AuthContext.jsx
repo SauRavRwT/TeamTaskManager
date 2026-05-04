@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { createContext, useContext, useEffect, useState } from "react";
+import { auth, db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { ref, get } from "firebase/database";
 
 const AuthContext = createContext();
-
-export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -12,49 +11,55 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      
-      if (user) {
-        // Sync with backend to get dbUser (including role)
+    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      setCurrentUser(firebaseUser);
+
+      if (firebaseUser) {
         try {
-          const token = await user.getIdToken();
-          const response = await fetch('/api/auth/sync', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-              name: user.displayName,
-              email: user.email
-            })
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setDbUser(data.user);
+          const userRef = ref(db, `users/${firebaseUser.uid}`);
+          const snap = await get(userRef);
+          const dbUserData = snap.val();
+
+          if (dbUserData) {
+            setDbUser({
+              id: firebaseUser.uid,
+              email: firebaseUser.email,
+              name: dbUserData.name || "User",
+              role: dbUserData.role || "MEMBER",
+            });
+          } else {
+            const defaultUser = {
+              id: firebaseUser.uid,
+              email: firebaseUser.email,
+              name: firebaseUser.displayName || "User",
+              role: "MEMBER",
+            };
+            setDbUser(defaultUser);
           }
         } catch (error) {
-          console.error("Failed to sync user", error);
+          console.error("Failed to fetch user from RTDB", error);
+          setDbUser({
+            id: firebaseUser.uid,
+            email: firebaseUser.email,
+            name: firebaseUser.displayName || "User",
+            role: "MEMBER",
+          });
         }
       } else {
         setDbUser(null);
       }
+
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsub();
   }, []);
 
-  const value = {
-    currentUser,
-    dbUser,
-    loading
-  };
-
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ currentUser, dbUser, loading }}>
+      {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);
