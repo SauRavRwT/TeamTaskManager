@@ -1,0 +1,7 @@
+/* These are the basic rules that allow anyone to read and write to the database. For a real application, you would want to implement more secure rules that restrict access based on authentication and user roles. */
+{
+  "rules": {
+    ".read": "true",
+    ".write": "true"
+  }
+}

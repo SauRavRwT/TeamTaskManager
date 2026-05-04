@@ -28,4 +28,4 @@ dist-ssr
 .env
 
 # Database files
-database.rules.json
+.database.rules.json
