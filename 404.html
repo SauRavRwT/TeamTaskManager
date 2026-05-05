@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Team Task Manager</title>
+    <script>
+        // GitHub Pages SPA redirect trick.
+        // When GH Pages can't find a file (any route except /), it serves this 404.html.
+        // We encode the current path into the query string, then redirect to the root index.html.
+        // index.html will decode it and push it into the browser history so React Router picks it up.
+        var l = window.location;
+        var segmentCount = 1; // must match the number of path segments in your basename
+        // basename="/TeamTaskManager/" → 1 segment → segmentCount = 1
+        var path = l.pathname
+            .split("/")
+            .slice(0, 1 + segmentCount)
+            .join("/");
+
+        l.replace(
+            l.protocol +
+            "//" +
+            l.hostname +
+            (l.port ? ":" + l.port : "") +
+            path +
+            "/?p=" +
+            encodeURIComponent(
+                l.pathname.slice(path.length) + l.search
+            ) +
+            (l.hash ? "&hash=" + encodeURIComponent(l.hash.slice(1)) : "")
+        );
+    </script>
+</head>
+
+<body></body>
+
+</html>
