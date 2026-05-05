@@ -1,13 +1,31 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TTM</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTM</title>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var p = params.get("p");
+      var hash = params.get("hash");
+      if (p) {
+        var url =
+          window.location.pathname.replace(/\/$/, "") +
+          (p.startsWith("/") ? p : "/" + p);
+        if (hash) url += "#" + hash;
+        // Replace current history entry so the ?p= never appears in the address bar
+        window.history.replaceState(null, null, url);
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
