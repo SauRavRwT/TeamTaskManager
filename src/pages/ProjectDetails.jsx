@@ -421,7 +421,10 @@ export default function ProjectDetails() {
 
                   <form onSubmit={createTask} noValidate>
                     <div className="mb-3">
-                      <label className="form-label text-muted small fw-bold">
+                      <label
+                        className="form-label text-muted small fw-bold"
+                        htmlFor="task_title_id"
+                      >
                         TASK TITLE *
                       </label>
                       <input
@@ -431,16 +434,21 @@ export default function ProjectDetails() {
                         value={newTaskTitle}
                         onChange={(e) => setNewTaskTitle(e.target.value)}
                         required
+                        id="task_title_id"
                       />
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label text-muted small fw-bold">
+                      <label
+                        className="form-label text-muted small fw-bold"
+                        htmlFor="task_desc_id"
+                      >
                         DESCRIPTION
                       </label>
                       <textarea
                         className="form-control"
                         placeholder="Add details (optional)"
+                        id="task_desc_id"
                         rows={3}
                         value={newTaskDesc}
                         onChange={(e) => setNewTaskDesc(e.target.value)}
@@ -448,7 +456,10 @@ export default function ProjectDetails() {
                     </div>
 
                     <div className="mb-4">
-                      <label className="form-label text-muted small fw-bold">
+                      <label
+                        className="form-label text-muted small fw-bold"
+                        htmlFor="assignee_id"
+                      >
                         ASSIGN TO MEMBER *
                       </label>
                       <select
@@ -456,6 +467,7 @@ export default function ProjectDetails() {
                         value={assigneeId}
                         onChange={(e) => setAssigneeId(e.target.value)}
                         required
+                        id="assignee_id"
                       >
                         <option value="">— Select Member —</option>
                         {assignableUsers.map((u) => (

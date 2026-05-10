@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
-import { auth, db } from "../firebase"; 
+import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { ref, onValue, push, set, remove, update } from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
@@ -100,7 +100,7 @@ export default function Dashboard() {
   const projectsRef = useRef({});
   const tasksRef = useRef({});
 
-  // Derive display state from raw maps 
+  // Derive display state from raw maps
   const sync = (user) => {
     const usersData = usersRef.current;
     const projectsData = projectsRef.current;
@@ -330,7 +330,10 @@ export default function Dashboard() {
                 <div className="card-body p-3">
                   <form onSubmit={createProject}>
                     <div className="mb-2">
-                      <label className="form-label text-muted small fw-bold">
+                      <label
+                        className="form-label text-muted small fw-bold"
+                        htmlFor="project_name_id"
+                      >
                         PROJECT NAME
                       </label>
                       <input
@@ -340,10 +343,14 @@ export default function Dashboard() {
                         required
                         value={newProjectName}
                         onChange={(e) => setNewProjectName(e.target.value)}
+                        id="project_name_id"
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label text-muted small fw-bold">
+                      <label
+                        className="form-label text-muted small fw-bold"
+                        htmlFor="project_desc_id"
+                      >
                         DESCRIPTION
                       </label>
                       <textarea
@@ -352,6 +359,7 @@ export default function Dashboard() {
                         rows={2}
                         value={newProjectDesc}
                         onChange={(e) => setNewProjectDesc(e.target.value)}
+                        id="project_desc_id"
                       />
                     </div>
                     <button
